@@ -29,9 +29,7 @@ export class SBT {
     await this.caver.wallet.sign(this.keyring.address, tx)
     const rlpEncodedTransaction = tx.getRLPEncoding()
     console.log('sbt-js:signAdnExecute:rlpEncodedTransaction:', rlpEncodedTransaction)
-    const receipt = await this.caver.rpc.klay.sendRawTransaction(rlpEncodedTransaction)
-    console.log('sbt-js:signAndExecute:receipt:', receipt)
-    return receipt
+    return this.caver.rpc.klay.sendRawTransaction(rlpEncodedTransaction)
   }
 
   public async deploySbt(
@@ -44,7 +42,7 @@ export class SBT {
     const sbtContract = this.caver.contract.create(SBT__factory.abi)
     const sbtContractDeploy = sbtContract.deploy(SBT__factory.bytecode, params)
     const gasEstimate = sbtContractDeploy.estimateGas()
-    return await sbtContractDeploy.send({
+    return sbtContractDeploy.send({
       from: this.keyring.address,
       gas: gasEstimate
     })
@@ -85,11 +83,7 @@ export class SBT {
 
     const sbtContract = this.buildSbtContract(sbtAddress)
     try {
-      const tokenUri = await sbtContract.methods
-        .tokenURI(tokenId)
-        .call({ from: this.keyring.address })
-      console.log('sbt-js:getTokenUri:tokenUri:', tokenUri)
-      return tokenUri
+      return sbtContract.methods.tokenURI(tokenId).call({ from: this.keyring.address })
     } catch (error) {
       console.error(error)
       throw new SbtError(SbtErrorCode.GetTokenUriError, 'Fetching tokenURI failed')
