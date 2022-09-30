@@ -36,40 +36,36 @@ export class SBT {
     name: string,
     symbol: string,
     baseUri: string
-  ): Promise<TransactionReceipt> {
+  ): Promise<Contract> {
     const params = [name, symbol, baseUri]
 
     const sbtContract = this.caver.contract.create(SBT__factory.abi)
-    const sbtContractDeploy = sbtContract.deploy(SBT__factory.bytecode, params)
-    const gasEstimate = sbtContractDeploy.estimateGas()
-    return sbtContractDeploy.send({
+    const sbtContractDeploy = await sbtContract.deploy({
+			data: SBT__factory.bytecode,
+			arguments: params
+		})
+
+		var gasEstimate = await sbtContractDeploy.estimateGas()
+    return await sbtContractDeploy.send({
       from: this.keyring.address,
-      gas: gasEstimate
+      gas: gasEstimate + Math.round(gasEstimate * 1.1)
     })
   }
 
   public async mintSbt(
     sbtAddress: string,
-    userAddress: string,
-    tokenUri: string
+    userAddress: string
   ): Promise<TransactionReceipt> {
     console.log('sbt-js:mintSbt')
     console.log('sbt-js:mintSbt:userAddress:', userAddress)
 
     const sbtContract = this.buildSbtContract(sbtAddress)
-
     try {
-      const params = [userAddress, tokenUri]
-      const input = this.caver.abi.encodeFunctionCall(SBT__factory.abi, params)
-      const gasAmount = await sbtContract.methods.safeMint(...params).estimateGas() // FIXME change name
-
-      const tx = this.caver.transaction.smartContractExecution.create({
-        from: this.keyring.address,
-        to: sbtAddress,
-        gas: gasAmount,
-        input: input
-      })
-      return this.signAndSendTransaction(tx)
+      const mintTxn = await sbtContract.methods
+        .safeMint(userAddress)
+        .send({ from: userAddress, gas: '7000000' })
+			console.log(mintTxn)
+			return mintTxn
     } catch (error) {
       console.error(error)
       throw new SbtError(SbtErrorCode.MintSbtError, 'SBT minting failed')
@@ -102,7 +98,7 @@ export class SBT {
       from: this.keyring.address,
       to: userAddress,
       value: tokenAmount,
-      gas: 21000
+      gas: '7000000'
     })
     return this.signAndSendTransaction(tx)
   }
