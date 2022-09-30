@@ -8,6 +8,7 @@ export interface Keyring {
 }
 
 export enum Network {
+  localhost = 'localhost',
   baobab = 'baobab',
   cypress = 'cypress'
 }
