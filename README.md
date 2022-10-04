@@ -22,9 +22,3 @@ yarn install
 ```shell
 yarn build
 ```
-
-## Publish
-
-```shell
-cd dist && yarn publish
-```
