@@ -306,8 +306,8 @@
 
 "@bisonai/sbt-contracts@0.2.0-demo":
   version "0.2.0-demo"
-  resolved "https://bisonai-831311642255.d.codeartifact.us-west-2.amazonaws.com:443/npm/bisonai/@bisonai/sbt-contracts/-/sbt-contracts-0.2.0-demo.tgz#6c10ddc1e77d17cd9366c05205afac922b33bf97"
-  integrity sha512-XogC4AM9BEC5UVq8SwCDmTPuIHgbEBRJAT8l0OZwRp+1XuQGpmpOENHchLtixSHkXDncxkJ+mxBLck3MYutPdQ==
+  resolved "https://bisonai-831311642255.d.codeartifact.us-west-2.amazonaws.com:443/npm/bisonai/@bisonai/sbt-contracts/-/sbt-contracts-0.2.0-demo.tgz#e916e577d821529e7ddefed9e2a322d97ed97b66"
+  integrity sha512-PDKpx3PRIgpmwxmVfuuZwI0zqsQE1FuW/LhWm1fQoFjnVJTPiR91a2CF1UaqPWyRPEsFEbqLBuqpX8GL4ZaBeg==
   dependencies:
     "@openzeppelin/contracts" "^4.7.2"
 
