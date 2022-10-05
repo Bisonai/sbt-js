@@ -32,30 +32,23 @@ export class SBT {
     return this.caver.rpc.klay.sendRawTransaction(rlpEncodedTransaction)
   }
 
-  public async deploySbt(
-    name: string,
-    symbol: string,
-    baseUri: string
-  ): Promise<Contract> {
+  public async deploySbt(name: string, symbol: string, baseUri: string): Promise<Contract> {
     const params = [name, symbol, baseUri]
 
     const sbtContract = this.caver.contract.create(SBT__factory.abi)
     const sbtContractDeploy = await sbtContract.deploy({
-			data: SBT__factory.bytecode,
-			arguments: params
-		})
+      data: SBT__factory.bytecode,
+      arguments: params
+    })
 
-		var gasEstimate = await sbtContractDeploy.estimateGas()
+    var gasEstimate = await sbtContractDeploy.estimateGas()
     return await sbtContractDeploy.send({
       from: this.keyring.address,
       gas: gasEstimate + Math.round(gasEstimate * 1.1)
     })
   }
 
-  public async mintSbt(
-    sbtAddress: string,
-    userAddress: string
-  ): Promise<TransactionReceipt> {
+  public async mintSbt(sbtAddress: string, userAddress: string): Promise<TransactionReceipt> {
     console.log('sbt-js:mintSbt')
     console.log('sbt-js:mintSbt:userAddress:', userAddress)
 
@@ -63,9 +56,9 @@ export class SBT {
     try {
       const mintTxn = await sbtContract.methods
         .safeMint(userAddress)
-        .send({ from: userAddress, gas: '7000000' })
-			console.log(mintTxn)
-			return mintTxn
+        .call({ from: this.keyring.address, gas: '7000000' }) // FIXME
+      console.log(mintTxn)
+      return mintTxn
     } catch (error) {
       console.error(error)
       throw new SbtError(SbtErrorCode.MintSbtError, 'SBT minting failed')
