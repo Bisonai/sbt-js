@@ -56,7 +56,7 @@ export class SBT {
     try {
       const mintTxn = await sbtContract.methods
         .safeMint(userAddress)
-        .call({ from: this.keyring.address, gas: '7000000' }) // FIXME
+        .send({ from: this.keyring.address, gas: '7000000' })
       console.log(mintTxn)
       return mintTxn
     } catch (error) {
