@@ -304,10 +304,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bisonai/sbt-contracts@0.2.0-demo":
-  version "0.2.0-demo"
-  resolved "https://bisonai-831311642255.d.codeartifact.us-west-2.amazonaws.com:443/npm/bisonai/@bisonai/sbt-contracts/-/sbt-contracts-0.2.0-demo.tgz#e916e577d821529e7ddefed9e2a322d97ed97b66"
-  integrity sha512-PDKpx3PRIgpmwxmVfuuZwI0zqsQE1FuW/LhWm1fQoFjnVJTPiR91a2CF1UaqPWyRPEsFEbqLBuqpX8GL4ZaBeg==
+"@bisonai/sbt-contracts@0.2.0-demo2":
+  version "0.2.0-demo2"
+  resolved "https://bisonai-831311642255.d.codeartifact.us-west-2.amazonaws.com:443/npm/bisonai/@bisonai/sbt-contracts/-/sbt-contracts-0.2.0-demo2.tgz#3b373e1235adad1dcdef6f1204feb5165c320407"
+  integrity sha512-pMWgF9qVCdhGIpdaDooKiXEf79YfxSTFh0I3nss+HMdOugdjKCJk3Bqv4Wvwke0O3z69pqGo17Pk2HgmicT+1A==
   dependencies:
     "@openzeppelin/contracts" "^4.7.2"
 
