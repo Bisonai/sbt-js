@@ -1,25 +1,21 @@
 {
-  "include": ["./src/**/*"],
   "exclude": ["node_modules"],
   "compilerOptions": {
-    "outDir": "dist",
-    "noImplicitThis": false,
-    "moduleResolution": "node",
-    "module": "es2020",
-    "target": "es2020",
-    "lib": ["es2020", "DOM"],
-    "sourceMap": true,
+    "module": "commonjs",
     "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "resolveJsonModule": true,
-    "noImplicitReturns": true,
-    "pretty": true,
-    "strict": true,
-    "esModuleInterop": true,
-    "noImplicitAny": false,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "incremental": true,
     "skipLibCheck": true,
-    "allowJs": true
-    // "typeRoots": ["@types", "node_modules/@types"],
-    // "types": ["node", "jest"]
+    "noImplicitAny": false,
+    "strictNullChecks": true,
+    "strictBindCallApply": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true
   }
 }

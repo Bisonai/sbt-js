@@ -1,13 +1,14 @@
 {
   "name": "@bisonai/sbt-js",
-  "version": "0.2.0",
+  "version": "0.2.0-demo",
+  "main": "dist/src/index.js",
   "description": "Javascript interface to control deployed @bisonai/sbt-contracts",
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
-  "main": "dist/index.js",
+
   "license": "UNLICENSED",
-  "type": "module",
   "scripts": {
     "build": "tsc",
     "test": "jest --testTimeout 150000",
