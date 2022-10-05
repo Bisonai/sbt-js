@@ -24,7 +24,7 @@
     "typescript": "^4.8.3"
   },
   "dependencies": {
-    "@bisonai/sbt-contracts": "^0.2.0",
+    "@bisonai/sbt-contracts": "0.2.0-demo",
     "caver-js": "^1.8.0"
   },
   "publishConfig": {
