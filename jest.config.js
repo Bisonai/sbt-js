@@ -16,4 +16,4 @@ const config = {
   maxWorkers: 1,
   bail: true
 }
-export default config
+module.exports = config
