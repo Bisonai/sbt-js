@@ -1,4 +1,5 @@
 {
+  "include": ["./src/**/*"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "module": "commonjs",
@@ -16,6 +17,7 @@
     "strictNullChecks": true,
     "strictBindCallApply": true,
     "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "allowJs": true
   }
 }

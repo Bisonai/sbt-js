@@ -7,7 +7,6 @@
     "dist",
     "src"
   ],
-
   "license": "UNLICENSED",
   "scripts": {
     "build": "tsc",
