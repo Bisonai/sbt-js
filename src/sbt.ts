@@ -48,16 +48,22 @@ export class SBT {
     })
   }
 
-  public async mint(sbtAddress: string, userAddress: string, tokenId: number): Promise<TransactionReceipt> {
+  public async mint(
+    sbtAddress: string,
+    userAddress: string,
+    tokenId: number
+  ): Promise<TransactionReceipt> {
     console.log('sbt-js:mintSbt')
     console.log('sbt-js:mintSbt:userAddress:', userAddress)
 
     const sbtContract = this.buildSbtContract(sbtAddress)
     try {
       const params = [userAddress, tokenId]
-      const gasEstimate = await sbtContract.methods.safeMint(...params).estimateGas({ from: this.keyring.address })
-      console.log("sbt-js:mint:estimateGas:", gasEstimate)
-      
+      const gasEstimate = await sbtContract.methods
+        .safeMint(...params)
+        .estimateGas({ from: this.keyring.address })
+      console.log('sbt-js:mint:estimateGas:', gasEstimate)
+
       const mintTxn = await sbtContract.methods
         .safeMint(userAddress, tokenId)
         .send({ from: this.keyring.address, gas: Math.round(gasEstimate * 1.1) })
@@ -82,7 +88,10 @@ export class SBT {
     }
   }
 
-  public async sendKlayReward(userAddress: string,tokenAmount: string): Promise<TransactionReceipt> {
+  public async sendKlayReward(
+    userAddress: string,
+    tokenAmount: string
+  ): Promise<TransactionReceipt> {
     console.log('sbt-js:sendKlayReward')
     console.log('sbt-js:sendKlayReward:userAddress:', userAddress)
     console.log('sbt-js:sendKlayReward:tokenAmount:', tokenAmount)
