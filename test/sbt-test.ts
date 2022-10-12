@@ -1,25 +1,29 @@
 import { SBT, Network } from '../src/index'
-import { expect } from "chai";
+import { SETTINGS } from '../src/constants'
+import { assert, expect } from "chai";
 
 let sbt: SBT
-let sbtContractAddress
-		
+let sbtContractAddress = SETTINGS.baobab.SBT_CONTRACT_ADDRESS
+const baseURI = "ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/"
+const tokenID = 0
+
 describe('SBT', () => {
   beforeEach(async () => {
-    let wallet = global.Wallet
-    const privateKey = await wallet._signingKey().privateKey
-    console.log("Private_Key: privateKey", privateKey)
-    sbt = new SBT(Network.localhost, privateKey)
+    const wallet = global.Wallet
+    console.log("Wallet:", wallet)
+    const privateKey = await wallet._signingKey()
+    console.log("SignedKey", privateKey)
+    console.log("Private_Key: privateKey", privateKey.privateKey)
+    sbt = new SBT(Network.baobab, privateKey.privateKey)
 		console.log("sbt")
   })
 
-  it('#1 Deloy SpBT', async function () {
-		const sbtName = "SBT";
-    const sbtSymbol = "SBT";
-    const baseURI = "ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/";
-    const deployedSBT = await sbt.deploySbt(sbtName, sbtSymbol, baseURI);
-		console.log("Deployed SBT:", deployedSBT);
-		console.log("Deployed SBT address:", deployedSBT._address);
+  it('#1 Deloy SBT', async function () {
+		const sbtName = "SBT"
+    const sbtSymbol = "SBT"
+    const deployedSBT = await sbt.deploy(sbtName, sbtSymbol, baseURI)
+		console.log("Deployed SBT:", deployedSBT)
+		console.log("Deployed SBT address:", deployedSBT._address)
 		sbtContractAddress = deployedSBT._address
 	})
 
@@ -27,27 +31,30 @@ describe('SBT', () => {
 		let wallet = global.Wallet
     const userAddress = wallet.address
 		console.log("sbt-test:UserAddress", userAddress)
-    let tx = await sbt.mintSbt(sbtContractAddress, userAddress)
+    let tx = await sbt.mint(sbtContractAddress, userAddress, tokenID)
 		console.log(tx)
   })
 
   it('#3 Get tokenURI', async function () {
-		let tokenUri = await sbt.getTokenUri(sbtContractAddress, "0")
+		let tokenUri = await sbt.getTokenUri(sbtContractAddress, tokenID)
 		console.log("sbt-test:TokenUri", tokenUri)
+    assert.equal(tokenUri, baseURI+tokenID.toString())
 	})
-	
-	// TODO
-	// it('#4 Get tokenURI should fail with invalid ID', async function () {
-	// 	let tokenUri = await sbt.getTokenUri(sbtContractAddress, "!*@(#AD").
-	// 	await expect(
-	// 		sbt.getTokenUri(sbtContractAddress, "!*@(#AD")
-	// 		).to.be.reverted
-	// })
 
-  it('#4 send Klay Reward', async function () {
+	it('#4 Get tokenURI should fail with invalid ID', async function () {
+    let invalidId = -1
+    try {
+      await sbt.getTokenUri(sbtContractAddress, invalidId)
+    } catch(error) {
+      console.log("Error:", error)
+    }
+	 })
+
+  it('#5 send Klay Reward', async function () {
     const userAddress = global.Wallet1.address
 		const tokenAmount = "11"
 		console.log("sbt-test:UserAddress", userAddress)
     let tx = await sbt.sendKlayReward(userAddress, tokenAmount)
+    console.log("sbt-test:sendKlayReward:tx:", tx)
 	})
 })
