@@ -32,7 +32,7 @@ export class SBT {
     return this.caver.rpc.klay.sendRawTransaction(rlpEncodedTransaction)
   }
 
-  public async deploySbt(name: string, symbol: string, baseUri: string): Promise<Contract> {
+  public async deploy(name: string, symbol: string, baseUri: string): Promise<Contract> {
     const params = [name, symbol, baseUri]
 
     const sbtContract = this.caver.contract.create(SBT__factory.abi)
@@ -44,20 +44,23 @@ export class SBT {
     var gasEstimate = await sbtContractDeploy.estimateGas()
     return await sbtContractDeploy.send({
       from: this.keyring.address,
-      gas: gasEstimate + Math.round(gasEstimate * 1.1)
+      gas: Math.round(gasEstimate * 1.1)
     })
   }
 
-  public async mintSbt(sbtAddress: string, userAddress: string): Promise<TransactionReceipt> {
+  public async mint(sbtAddress: string, userAddress: string, tokenId: number): Promise<TransactionReceipt> {
     console.log('sbt-js:mintSbt')
     console.log('sbt-js:mintSbt:userAddress:', userAddress)
 
     const sbtContract = this.buildSbtContract(sbtAddress)
     try {
+      const params = [userAddress, tokenId]
+      const gasEstimate = await sbtContract.methods.safeMint(...params).estimateGas({ from: this.keyring.address })
+      console.log("sbt-js:mint:estimateGas:", gasEstimate)
+      
       const mintTxn = await sbtContract.methods
-        .safeMint(userAddress)
-        .send({ from: this.keyring.address, gas: '7000000' })
-      console.log(mintTxn)
+        .safeMint(userAddress, tokenId)
+        .send({ from: this.keyring.address, gas: Math.round(gasEstimate * 1.1) })
       return mintTxn
     } catch (error) {
       console.error(error)
@@ -65,7 +68,7 @@ export class SBT {
     }
   }
 
-  public async getTokenUri(sbtAddress: string, tokenId: string): Promise<string> {
+  public async getTokenUri(sbtAddress: string, tokenId: number): Promise<string> {
     console.log('sbt-js:getTokenUri')
     console.log('sbt-js:getTokenUri:sbtAddress:', sbtAddress)
     console.log('sbt-js:getTokenUri:tokenId:', tokenId)
@@ -79,10 +82,7 @@ export class SBT {
     }
   }
 
-  public async sendKlayReward(
-    userAddress: string,
-    tokenAmount: string
-  ): Promise<TransactionReceipt> {
+  public async sendKlayReward(userAddress: string,tokenAmount: string): Promise<TransactionReceipt> {
     console.log('sbt-js:sendKlayReward')
     console.log('sbt-js:sendKlayReward:userAddress:', userAddress)
     console.log('sbt-js:sendKlayReward:tokenAmount:', tokenAmount)
@@ -91,7 +91,7 @@ export class SBT {
       from: this.keyring.address,
       to: userAddress,
       value: tokenAmount,
-      gas: '7000000'
+      gas: '21001'
     })
     return this.signAndSendTransaction(tx)
   }
