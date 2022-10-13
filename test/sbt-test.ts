@@ -3,13 +3,13 @@ import { SETTINGS } from '../src/constants'
 import { assert, expect } from 'chai'
 
 let sbt: SBT
-let sbtContractAddress = SETTINGS.baobab.SBT_CONTRACT_ADDRESS
+let sbtContractAddress = SETTINGS.baobab.SBT_TEST_CONTRACT_ADDRESS
 const baseURI = 'ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/'
 const tokenID = 0
 
 describe('SBT', () => {
   beforeEach(async () => {
-    const wallet = global.Wallet
+    const wallet = global.Wallet0
     console.log('Wallet:', wallet)
     const privateKey = await wallet._signingKey()
     console.log('SignedKey', privateKey)
@@ -28,7 +28,7 @@ describe('SBT', () => {
   })
 
   it('#2 Mint SBT', async function () {
-    let wallet = global.Wallet
+    let wallet = global.Wallet0
     const userAddress = wallet.address
     console.log('sbt-test:UserAddress', userAddress)
     let tx = await sbt.mint(sbtContractAddress, userAddress, tokenID)
