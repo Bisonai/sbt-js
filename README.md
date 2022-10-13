@@ -22,3 +22,9 @@ yarn install
 ```shell
 yarn build
 ```
+
+## Test
+
+```shell
+yarn test
+```
