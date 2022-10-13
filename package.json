@@ -1,6 +1,6 @@
 {
   "name": "@bisonai/sbt-js",
-  "version": "0.2.0-demo2",
+  "version": "0.3.0",
   "main": "dist/src/index.js",
   "description": "Javascript interface to control deployed @bisonai/sbt-contracts",
   "files": [
