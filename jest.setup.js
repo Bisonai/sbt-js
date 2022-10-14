@@ -15,3 +15,4 @@ if (process.env.RUNNING_NETWORK == 'baobab') {
 }
 global.Wallet0 = wallet0
 global.Wallet1 = wallet1
+global.SBT_CONTRACT_ADDRESS = process.env.SBT_TEST_CONTRACT_ADDRESS
