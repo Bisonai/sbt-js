@@ -3,7 +3,7 @@ import { SETTINGS } from '../src/constants'
 import { assert, expect } from 'chai'
 
 let sbt: SBT
-let sbtContractAddress = SETTINGS.baobab.SBT_TEST_CONTRACT_ADDRESS
+let sbtContractAddress = global.SBT_CONTRACT_ADDRESS
 const baseURI = 'ipfs://QmeSjSinHpPnmXmspMjwiXyN6zS4E9zccariGR3jxcaWtq/'
 const tokenID = 0
 
