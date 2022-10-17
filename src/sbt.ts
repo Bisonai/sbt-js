@@ -88,6 +88,27 @@ export class SBT {
     }
   }
 
+  public async updateBaseUri(sbtAddress: string, baseURI: string): Promise<string> {
+    console.log('sbt-js:updateBaseURI')
+    console.log('sbt-js:updateBaseURI:sbtAddress:', sbtAddress)
+
+    const sbtContract = this.buildSbtContract(sbtAddress)
+    try {
+      const params = [baseURI]
+      const gasEstimate = await sbtContract.methods
+        .updateBaseURI(...params)
+        .estimateGas({ from: this.keyring.address })
+      console.log('sbt-js:updateBaseUri:estimateGas:', gasEstimate)
+      const updateBaseUriTxn = await sbtContract.methods
+        .updateBaseURI(baseURI)
+        .send({ from: this.keyring.address, gas: Math.round(gasEstimate * 1.1) })
+      return updateBaseUriTxn
+    } catch (error) {
+      console.error(error)
+      throw new SbtError(SbtErrorCode.GetTokenUriError, 'Fetching updateBaseURI failed')
+    }
+  }
+
   public async sendKlayReward(
     userAddress: string,
     tokenAmount: string
