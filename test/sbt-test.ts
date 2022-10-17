@@ -50,7 +50,27 @@ describe('SBT', () => {
     }
   })
 
-  it('#5 send Klay Reward', async function () {
+  it('#5 updateBaseUri should pass', async function () {
+    const newBaseUri = 'localhost:'
+    try {
+      await sbt.updateBaseUri(sbtContractAddress, newBaseUri)
+    } catch (error) {
+      console.log('Error:', error)
+    }
+    let baseUri = await sbt.getTokenUri(sbtContractAddress, tokenID)
+    console.log('sbt-test:updateBaseUri', baseUri)
+    assert.equal(baseUri, newBaseUri + tokenID.toString())
+
+    try {
+      await sbt.updateBaseUri(sbtContractAddress, baseURI)
+    } catch (error) {
+      console.log('Error:', error)
+    }
+    baseUri = await sbt.getTokenUri(sbtContractAddress, tokenID)
+    assert.equal(baseUri, baseURI + tokenID.toString())
+  })
+
+  it('#6 send Klay Reward', async function () {
     const userAddress = global.Wallet1.address
     const tokenAmount = '11'
     console.log('sbt-test:UserAddress', userAddress)
