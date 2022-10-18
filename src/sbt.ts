@@ -5,6 +5,8 @@ import { Network, Keyring, Transaction } from './types'
 import { SBT__factory } from '@bisonai/sbt-contracts'
 import { SbtErrorCode, SbtError } from './errors'
 
+const gasCoefficient = 1.1
+
 export class SBT {
   private caver: typeof Caver
   private keyring: Keyring
@@ -44,7 +46,7 @@ export class SBT {
     var gasEstimate = await sbtContractDeploy.estimateGas()
     return await sbtContractDeploy.send({
       from: this.keyring.address,
-      gas: Math.round(gasEstimate * 1.1)
+      gas: Math.round(gasEstimate * gasCoefficient)
     })
   }
 
@@ -66,7 +68,7 @@ export class SBT {
 
       const mintTxn = await sbtContract.methods
         .safeMint(userAddress, tokenId)
-        .send({ from: this.keyring.address, gas: Math.round(gasEstimate * 1.1) })
+        .send({ from: this.keyring.address, gas: Math.round(gasEstimate * gasCoefficient) })
       return mintTxn
     } catch (error) {
       console.error(error)
@@ -101,7 +103,7 @@ export class SBT {
       console.log('sbt-js:updateBaseUri:estimateGas:', gasEstimate)
       const updateBaseUriTxn = await sbtContract.methods
         .updateBaseURI(baseURI)
-        .send({ from: this.keyring.address, gas: Math.round(gasEstimate * 1.1) })
+        .send({ from: this.keyring.address, gas: Math.round(gasEstimate * gasCoefficient) })
       return updateBaseUriTxn
     } catch (error) {
       console.error(error)
