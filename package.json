@@ -1,6 +1,6 @@
 {
   "name": "@bisonai/sbt-js",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "main": "dist/src/index.js",
   "description": "Javascript interface to control deployed @bisonai/sbt-contracts",
   "files": [
@@ -12,7 +12,7 @@
     "build": "tsc",
     "test": "jest --testTimeout 150000",
     "clean": "rm -rf node_modules dist",
-    "pub": "cd dist && yarn publish"
+    "pub": "yarn publish"
   },
   "author": "Bisonai",
   "devDependencies": {
