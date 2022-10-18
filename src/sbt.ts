@@ -107,7 +107,7 @@ export class SBT {
       return updateBaseUriTxn
     } catch (error) {
       console.error(error)
-      throw new SbtError(SbtErrorCode.GetTokenUriError, 'Fetching updateBaseURI failed')
+      throw new SbtError(SbtErrorCode.UpdateBaseUriError, 'Updating updateBaseUri failed')
     }
   }
 

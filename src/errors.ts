@@ -1,6 +1,7 @@
 export enum SbtErrorCode {
   MintSbtError = 10000, // SBT minting failed
-  GetTokenUriError // Fetching tokenURI failed
+  GetTokenUriError, // Fetching tokenURI failed
+  UpdateBaseUriError
 }
 
 export class SbtError extends Error {
