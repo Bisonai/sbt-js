@@ -51,7 +51,7 @@ describe('SBT', () => {
   })
 
   it('#5 updateBaseUri should pass', async function () {
-    const newBaseUri = 'localhost:'
+    const newBaseUri = 'http://localhost/'
     try {
       await sbt.updateBaseUri(sbtContractAddress, newBaseUri)
     } catch (error) {
