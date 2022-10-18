@@ -1,6 +1,5 @@
 import { SBT, Network } from '../src/index'
-import { SETTINGS } from '../src/constants'
-import { assert, expect } from 'chai'
+import { assert } from 'chai'
 
 let sbt: SBT
 let sbtContractAddress = global.SBT_CONTRACT_ADDRESS
@@ -57,17 +56,17 @@ describe('SBT', () => {
     } catch (error) {
       console.log('Error:', error)
     }
-    let baseUri = await sbt.getTokenUri(sbtContractAddress, tokenID)
-    console.log('sbt-test:updateBaseUri', baseUri)
-    assert.equal(baseUri, newBaseUri + tokenID.toString())
+    let tokenUri = await sbt.getTokenUri(sbtContractAddress, tokenID)
+    console.log('sbt-test:updateBaseUri:tokeUri', tokenUri)
+    assert.equal(tokenUri, newBaseUri + tokenID.toString())
 
     try {
       await sbt.updateBaseUri(sbtContractAddress, baseURI)
     } catch (error) {
       console.log('Error:', error)
     }
-    baseUri = await sbt.getTokenUri(sbtContractAddress, tokenID)
-    assert.equal(baseUri, baseURI + tokenID.toString())
+    tokenUri = await sbt.getTokenUri(sbtContractAddress, tokenID)
+    assert.equal(tokenUri, baseURI + tokenID.toString())
   })
 
   it('#6 send Klay Reward', async function () {
