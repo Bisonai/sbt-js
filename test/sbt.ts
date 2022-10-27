@@ -11,6 +11,7 @@ let sbtAddress
 
 const tokenId = 0
 let baseUri = 'https://bisonai.com/'
+let logger
 
 class Accounts {
   public privateKey0
@@ -24,6 +25,11 @@ const ACCOUNTS = new Accounts()
 
 describe('SBT', () => {
   beforeEach(async () => {
+    if (process.env.TEST_LOGGER) {
+      logger = console.log
+    } else {
+      logger = function (arg: string) {}
+    }
     const network = process.env.TEST_NETWORK || Network.localhost
     if (network == Network.localhost) {
       // We recommend using ganache with -d option to generate
@@ -52,7 +58,7 @@ describe('SBT', () => {
       }
     }
 
-    sbt = new SBT(network, ACCOUNTS.privateKey0)
+    sbt = new SBT(network, ACCOUNTS.privateKey0, logger)
   })
 
   it('#1 Deploy SBT', async function () {
@@ -61,14 +67,14 @@ describe('SBT', () => {
   })
 
   it('#2 Mint SBT', async function () {
-    console.debug('sbt-test:ACCOUNTS.accountAdr0', ACCOUNTS.accountAdr0)
+    logger('sbt-test:ACCOUNTS.accountAdr0', ACCOUNTS.accountAdr0)
     let tx = await sbt.mint({ sbtAddress, userAddress: ACCOUNTS.accountAdr0, tokenId })
-    console.debug(tx)
+    logger(tx)
   })
 
   it('#3 Get tokenURI', async function () {
     let tokenUri = await sbt.getTokenUri({ sbtAddress, tokenId })
-    console.debug('sbt-test:TokenUri', tokenUri)
+    logger('sbt-test:TokenUri', tokenUri)
     assert.equal(tokenUri, baseUri + tokenId.toString())
   })
 
@@ -80,7 +86,7 @@ describe('SBT', () => {
     const newBaseUri = 'http://localhost/'
     await sbt.updateBaseUri({ sbtAddress, baseUri: newBaseUri })
     let tokenUri = await sbt.getTokenUri({ sbtAddress, tokenId })
-    console.debug('sbt-test:updateBaseUri:tokenUri', tokenUri)
+    logger('sbt-test:updateBaseUri:tokenUri', tokenUri)
     assert.equal(tokenUri, newBaseUri + tokenId.toString())
 
     await sbt.updateBaseUri({ sbtAddress, baseUri })
@@ -90,8 +96,8 @@ describe('SBT', () => {
 
   it('#6 sendKlayReward', async function () {
     const tokenAmount = '11'
-    console.debug('sbt-test:sendKlayReward:ACCOUNTS.accountAdr1', ACCOUNTS.accountAdr1)
+    logger('sbt-test:sendKlayReward:ACCOUNTS.accountAdr1', ACCOUNTS.accountAdr1)
     let tx = await sbt.sendKlayReward({ userAddress: ACCOUNTS.accountAdr1, tokenAmount })
-    console.debug('sbt-test:sendKlayReward:tx:', tx)
+    logger('sbt-test:sendKlayReward:tx:', tx)
   })
 })
