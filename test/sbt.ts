@@ -63,18 +63,19 @@ describe('SBT', () => {
 
   it('#1 Deploy SBT', async function () {
     const contract = await sbt.deploy({ name: 'SBT', symbol: 'SBT', baseUri })
+    logger('sbt-test:deploy:contract', contract)
     sbtAddress = contract.address
   })
 
   it('#2 Mint SBT', async function () {
-    logger('sbt-test:ACCOUNTS.accountAdr0', ACCOUNTS.accountAdr0)
-    let tx = await sbt.mint({ sbtAddress, userAddress: ACCOUNTS.accountAdr0, tokenId })
-    logger(tx)
+    logger('sbt-test:mint:ACCOUNTS.accountAdr0', ACCOUNTS.accountAdr0)
+    const txReceipt = await sbt.mint({ sbtAddress, userAddress: ACCOUNTS.accountAdr0, tokenId })
+    logger('sbt-test:mint:txReceipt', txReceipt)
   })
 
   it('#3 Get tokenURI', async function () {
-    let tokenUri = await sbt.getTokenUri({ sbtAddress, tokenId })
-    logger('sbt-test:TokenUri', tokenUri)
+    const tokenUri = await sbt.getTokenUri({ sbtAddress, tokenId })
+    logger('sbt-test:getTokenUri:tokenUri', tokenUri)
     assert.equal(tokenUri, baseUri + tokenId.toString())
   })
 
@@ -91,13 +92,14 @@ describe('SBT', () => {
 
     await sbt.updateBaseUri({ sbtAddress, baseUri })
     tokenUri = await sbt.getTokenUri({ sbtAddress, tokenId })
+    logger('sbt-test:updateBaseUri:tokenUri', tokenUri)
     assert.equal(tokenUri, baseUri + tokenId.toString())
   })
 
   it('#6 sendKlayReward', async function () {
     const tokenAmount = '11'
     logger('sbt-test:sendKlayReward:ACCOUNTS.accountAdr1', ACCOUNTS.accountAdr1)
-    let tx = await sbt.sendKlayReward({ userAddress: ACCOUNTS.accountAdr1, tokenAmount })
-    logger('sbt-test:sendKlayReward:tx:', tx)
+    const txReceipt = await sbt.sendKlayReward({ userAddress: ACCOUNTS.accountAdr1, tokenAmount })
+    logger('sbt-test:sendKlayReward:txReceipt:', txReceipt)
   })
 })
