@@ -1,6 +1,5 @@
 const config = {
   verbose: true,
-  setupFiles: ['./jest.setup.js'],
   moduleFileExtensions: ['js', 'json', 'ts'],
   rootDir: '.',
   testMatch: ['<rootDir>/test/*.ts'],
@@ -16,4 +15,5 @@ const config = {
   maxWorkers: 1,
   bail: true
 }
-module.exports = config
+
+export default config
