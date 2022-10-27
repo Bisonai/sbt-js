@@ -33,12 +33,13 @@ export class SBT {
     symbol: string
     baseUri: string
   }): Promise<Contract> {
+    this.logger('sbt-js:deploy:sbtContract')
     const sbtContract = new ethers.ContractFactory(
       SBT__factory.abi,
       SBT__factory.bytecode,
       this.wallet
     )
-    this.logger(sbtContract)
+    this.logger('sbt-js:deploy:sbtContract:', sbtContract)
 
     try {
       const contract = await sbtContract.deploy(name, symbol, baseUri)
