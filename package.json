@@ -2,7 +2,7 @@
   "name": "@bisonai/sbt-js",
   "version": "0.4.0",
   "main": "dist/src/index.js",
-  "description": "Javascript interface to control deployed @bisonai/sbt-contracts",
+  "description": "Typescript interface to control SBT from  @bisonai/sbt-contracts",
   "files": [
     "dist",
     "src"
@@ -28,7 +28,6 @@
   },
   "dependencies": {
     "@bisonai/sbt-contracts": "0.3.0",
-    "ethers": "^5.7.2",
-
+    "ethers": "^5.7.2"
   }
 }
