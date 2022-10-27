@@ -7,12 +7,14 @@ import { SETTINGS } from './constants'
 
 export class SBT {
   private wallet
+  private logger
 
-  constructor(network: Network | string, privateKey: string) {
-    console.debug('sbt-js:constructor')
+  constructor(network: Network | string, privateKey: string, logger?: (arg: string) => void) {
+    this.logger = logger || ((arg: string) => arg)
+    this.logger('sbt-js:constructor')
 
     const settings = SETTINGS[network]
-    console.debug('sbt-js:constructor:settings:', settings)
+    this.logger('sbt-js:constructor:settings:', settings)
 
     const provider = new ethers.providers.JsonRpcProvider(settings.RPC_ENDPOINT)
     this.wallet = new ethers.Wallet(privateKey, provider)
@@ -36,7 +38,7 @@ export class SBT {
       SBT__factory.bytecode,
       this.wallet
     )
-    console.debug(sbtContract)
+    this.logger(sbtContract)
 
     try {
       const contract = await sbtContract.deploy(name, symbol, baseUri)
@@ -56,12 +58,12 @@ export class SBT {
     userAddress: string
     tokenId: number
   }): Promise<TransactionReceipt> {
-    console.debug('sbt-js:mintSbt')
-    console.debug('sbt-js:mintSbt:userAddress:', userAddress)
+    this.logger('sbt-js:mintSbt')
+    this.logger('sbt-js:mintSbt:userAddress:', userAddress)
 
     try {
       const sbtContract = this.fetchSbtContract(sbtAddress)
-      return await sbtContract.safeMint(userAddress, tokenId)
+      return (await sbtContract.safeMint(userAddress, tokenId)).wait()
     } catch (err) {
       throw new SbtError(SbtErrorCode.MintSbtError, err)
     }
@@ -74,9 +76,9 @@ export class SBT {
     sbtAddress: string
     tokenId: number
   }): Promise<string> {
-    console.debug('sbt-js:getTokenUri')
-    console.debug('sbt-js:getTokenUri:sbtAddress:', sbtAddress)
-    console.debug('sbt-js:getTokenUri:tokenId:', tokenId)
+    this.logger('sbt-js:getTokenUri')
+    this.logger('sbt-js:getTokenUri:sbtAddress:', sbtAddress)
+    this.logger('sbt-js:getTokenUri:tokenId:', tokenId)
 
     try {
       const sbtContract = this.fetchSbtContract(sbtAddress)
@@ -92,9 +94,9 @@ export class SBT {
   }: {
     sbtAddress: string
     baseUri: string
-  }): Promise<string> {
-    console.debug('sbt-js:updateBaseURI')
-    console.debug('sbt-js:updateBaseURI:sbtAddress:', sbtAddress)
+  }): Promise<TransactionReceipt> {
+    this.logger('sbt-js:updateBaseURI')
+    this.logger('sbt-js:updateBaseURI:sbtAddress:', sbtAddress)
 
     try {
       const sbtContract = this.fetchSbtContract(sbtAddress)
@@ -111,15 +113,17 @@ export class SBT {
     userAddress: string
     tokenAmount: string
   }): Promise<TransactionReceipt> {
-    console.debug('sbt-js:sendKlayReward')
-    console.debug('sbt-js:sendKlayReward:userAddress:', userAddress)
-    console.debug('sbt-js:sendKlayReward:tokenAmount:', tokenAmount)
+    this.logger('sbt-js:sendKlayReward')
+    this.logger('sbt-js:sendKlayReward:userAddress:', userAddress)
+    this.logger('sbt-js:sendKlayReward:tokenAmount:', tokenAmount)
 
     try {
-      return this.wallet.sendTransaction({
-        to: userAddress,
-        value: tokenAmount
-      })
+      return (
+        await this.wallet.sendTransaction({
+          to: userAddress,
+          value: tokenAmount
+        })
+      ).wait()
     } catch (err) {
       throw new SbtError(SbtErrorCode.SendKlayRewardError, err)
     }
