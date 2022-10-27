@@ -1,130 +1,127 @@
-const Caver = require('caver-js')
-import { TransactionReceipt, Contract } from 'caver-js'
-import { SETTINGS } from './constants'
-import { Network, Keyring, Transaction } from './types'
+import { ethers, Contract } from 'ethers'
+import { TransactionReceipt } from '@ethersproject/abstract-provider'
 import { SBT__factory } from '@bisonai/sbt-contracts'
+import { Network } from './types'
 import { SbtErrorCode, SbtError } from './errors'
-
-const gasCoefficient = 1.1
+import { SETTINGS } from './constants'
 
 export class SBT {
-  private caver: typeof Caver
-  private keyring: Keyring
+  private wallet
 
-  constructor(network: Network, privateKey: string) {
-    console.log('sbt-js:constructor')
+  constructor(network: Network | string, privateKey: string) {
+    console.debug('sbt-js:constructor')
 
     const settings = SETTINGS[network]
-    console.log('sbt-js:constructor:settings:', settings)
+    console.debug('sbt-js:constructor:settings:', settings)
 
-    this.caver = new Caver(settings.RPC_ENDPOINT)
-    this.keyring = this.caver.wallet.keyring.createFromPrivateKey(privateKey)
-    this.caver.wallet.add(this.keyring)
-    console.log('sbt-js:constructor:keyring:', this.caver.wallet.getKeyring(this.keyring.address))
+    const provider = new ethers.providers.JsonRpcProvider(settings.RPC_ENDPOINT)
+    this.wallet = new ethers.Wallet(privateKey, provider)
   }
 
-  private buildSbtContract(sbtAddress: string): Contract {
-    return new this.caver.contract(SBT__factory.abi, sbtAddress)
+  private fetchSbtContract(sbtAddress: string): Contract {
+    return new ethers.Contract(sbtAddress, SBT__factory.abi, this.wallet)
   }
 
-  private async signAndSendTransaction(tx: Transaction): Promise<TransactionReceipt> {
-    await this.caver.wallet.sign(this.keyring.address, tx)
-    const rlpEncodedTransaction = tx.getRLPEncoding()
-    console.log('sbt-js:signAdnExecute:rlpEncodedTransaction:', rlpEncodedTransaction)
-    return this.caver.rpc.klay.sendRawTransaction(rlpEncodedTransaction)
+  public async deploy({
+    name,
+    symbol,
+    baseUri
+  }: {
+    name: string
+    symbol: string
+    baseUri: string
+  }): Promise<Contract> {
+    const sbtContract = new ethers.ContractFactory(
+      SBT__factory.abi,
+      SBT__factory.bytecode,
+      this.wallet
+    )
+    console.debug(sbtContract)
+
+    try {
+      const contract = await sbtContract.deploy(name, symbol, baseUri)
+      await contract.deployed()
+      return contract
+    } catch (err) {
+      throw new SbtError(SbtErrorCode.DeploySbtError, err)
+    }
   }
 
-  public async deploy(name: string, symbol: string, baseUri: string): Promise<Contract> {
-    const params = [name, symbol, baseUri]
-
-    const sbtContract = this.caver.contract.create(SBT__factory.abi)
-    const sbtContractDeploy = await sbtContract.deploy({
-      data: SBT__factory.bytecode,
-      arguments: params
-    })
-
-    var gasEstimate = await sbtContractDeploy.estimateGas()
-    return await sbtContractDeploy.send({
-      from: this.keyring.address,
-      gas: Math.round(gasEstimate * gasCoefficient)
-    })
-  }
-
-  public async mint(
-    sbtAddress: string,
-    userAddress: string,
+  public async mint({
+    sbtAddress,
+    userAddress,
+    tokenId
+  }: {
+    sbtAddress: string
+    userAddress: string
     tokenId: number
-  ): Promise<TransactionReceipt> {
-    console.log('sbt-js:mintSbt')
-    console.log('sbt-js:mintSbt:userAddress:', userAddress)
+  }): Promise<TransactionReceipt> {
+    console.debug('sbt-js:mintSbt')
+    console.debug('sbt-js:mintSbt:userAddress:', userAddress)
 
-    const sbtContract = this.buildSbtContract(sbtAddress)
     try {
-      const params = [userAddress, tokenId]
-      const gasEstimate = await sbtContract.methods
-        .safeMint(...params)
-        .estimateGas({ from: this.keyring.address })
-      console.log('sbt-js:mint:estimateGas:', gasEstimate)
-
-      const mintTxn = await sbtContract.methods
-        .safeMint(userAddress, tokenId)
-        .send({ from: this.keyring.address, gas: Math.round(gasEstimate * gasCoefficient) })
-      return mintTxn
-    } catch (error) {
-      console.error(error)
-      throw new SbtError(SbtErrorCode.MintSbtError, 'SBT minting failed')
+      const sbtContract = this.fetchSbtContract(sbtAddress)
+      return await sbtContract.safeMint(userAddress, tokenId)
+    } catch (err) {
+      throw new SbtError(SbtErrorCode.MintSbtError, err)
     }
   }
 
-  public async getTokenUri(sbtAddress: string, tokenId: number): Promise<string> {
-    console.log('sbt-js:getTokenUri')
-    console.log('sbt-js:getTokenUri:sbtAddress:', sbtAddress)
-    console.log('sbt-js:getTokenUri:tokenId:', tokenId)
+  public async getTokenUri({
+    sbtAddress,
+    tokenId
+  }: {
+    sbtAddress: string
+    tokenId: number
+  }): Promise<string> {
+    console.debug('sbt-js:getTokenUri')
+    console.debug('sbt-js:getTokenUri:sbtAddress:', sbtAddress)
+    console.debug('sbt-js:getTokenUri:tokenId:', tokenId)
 
-    const sbtContract = this.buildSbtContract(sbtAddress)
     try {
-      return sbtContract.methods.tokenURI(tokenId).call({ from: this.keyring.address })
-    } catch (error) {
-      console.error(error)
-      throw new SbtError(SbtErrorCode.GetTokenUriError, 'Fetching tokenURI failed')
+      const sbtContract = this.fetchSbtContract(sbtAddress)
+      return await sbtContract.tokenURI(tokenId)
+    } catch (err) {
+      throw new SbtError(SbtErrorCode.GetTokenUriError, err)
     }
   }
 
-  public async updateBaseUri(sbtAddress: string, baseURI: string): Promise<string> {
-    console.log('sbt-js:updateBaseURI')
-    console.log('sbt-js:updateBaseURI:sbtAddress:', sbtAddress)
+  public async updateBaseUri({
+    sbtAddress,
+    baseUri
+  }: {
+    sbtAddress: string
+    baseUri: string
+  }): Promise<string> {
+    console.debug('sbt-js:updateBaseURI')
+    console.debug('sbt-js:updateBaseURI:sbtAddress:', sbtAddress)
 
-    const sbtContract = this.buildSbtContract(sbtAddress)
     try {
-      const params = [baseURI]
-      const gasEstimate = await sbtContract.methods
-        .updateBaseURI(...params)
-        .estimateGas({ from: this.keyring.address })
-      console.log('sbt-js:updateBaseUri:estimateGas:', gasEstimate)
-      const updateBaseUriTxn = await sbtContract.methods
-        .updateBaseURI(baseURI)
-        .send({ from: this.keyring.address, gas: Math.round(gasEstimate * gasCoefficient) })
-      return updateBaseUriTxn
-    } catch (error) {
-      console.error(error)
-      throw new SbtError(SbtErrorCode.UpdateBaseUriError, 'Updating updateBaseUri failed')
+      const sbtContract = this.fetchSbtContract(sbtAddress)
+      return (await sbtContract.updateBaseURI(baseUri)).wait()
+    } catch (err) {
+      throw new SbtError(SbtErrorCode.UpdateBaseUriError, err)
     }
   }
 
-  public async sendKlayReward(
-    userAddress: string,
+  public async sendKlayReward({
+    userAddress,
+    tokenAmount
+  }: {
+    userAddress: string
     tokenAmount: string
-  ): Promise<TransactionReceipt> {
-    console.log('sbt-js:sendKlayReward')
-    console.log('sbt-js:sendKlayReward:userAddress:', userAddress)
-    console.log('sbt-js:sendKlayReward:tokenAmount:', tokenAmount)
+  }): Promise<TransactionReceipt> {
+    console.debug('sbt-js:sendKlayReward')
+    console.debug('sbt-js:sendKlayReward:userAddress:', userAddress)
+    console.debug('sbt-js:sendKlayReward:tokenAmount:', tokenAmount)
 
-    const tx = this.caver.transaction.valueTransfer.create({
-      from: this.keyring.address,
-      to: userAddress,
-      value: tokenAmount,
-      gas: '21001'
-    })
-    return this.signAndSendTransaction(tx)
+    try {
+      return this.wallet.sendTransaction({
+        to: userAddress,
+        value: tokenAmount
+      })
+    } catch (err) {
+      throw new SbtError(SbtErrorCode.SendKlayRewardError, err)
+    }
   }
 }

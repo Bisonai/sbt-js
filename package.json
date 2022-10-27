@@ -27,9 +27,6 @@
   },
   "dependencies": {
     "@bisonai/sbt-contracts": "0.3.0",
-    "caver-js": "^1.8.0"
-  },
-  "publishConfig": {
-    "registry": "https://bisonai-831311642255.d.codeartifact.us-west-2.amazonaws.com/npm/bisonai/"
+    "ethers": "^5.7.2"
   }
 }
