@@ -2,11 +2,6 @@ import { SmartContractDeploy, SmartContractExecution, ValueTransfer } from 'cave
 
 export type Transaction = SmartContractDeploy | SmartContractExecution | ValueTransfer
 
-export interface Keyring {
-  address: string
-  privateKey: string
-}
-
 export enum Network {
   localhost = 'localhost',
   baobab = 'baobab',
