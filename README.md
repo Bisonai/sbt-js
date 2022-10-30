@@ -38,6 +38,10 @@ yarn build
 yarn pub
 ```
 
+## License
+
+[Apache License 2.0](LICENSE)
+
 ## TODO
 
 - [ ] update sbt-contracts dependency
