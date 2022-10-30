@@ -2,11 +2,13 @@
   "name": "@bisonai/sbt-js",
   "version": "0.4.0",
   "main": "dist/src/index.js",
-  "description": "Typescript interface to control SBT from  @bisonai/sbt-contracts",
+  "description": "Typescript interface to control SBT from @bisonai/sbt-contracts",
   "files": [
     "dist",
     "src"
   ],
+  "author": "Bisonai",
+  "homepage": "https://github.com/bisonai/sbt-js#readme",
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsc",
@@ -14,8 +16,6 @@
     "clean": "rm -rf dist",
     "pub": "yarn publish"
   },
-  "author": "Bisonai",
-  "homepage": "https://github.com/bisonai/sbt-js#readme",
   "devDependencies": {
     "@types/chai": "^4.2.0",
     "@types/jest": "^29.0.3",
