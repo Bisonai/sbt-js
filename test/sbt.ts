@@ -1,6 +1,6 @@
-import { SBT, Network } from '../src/index'
 import { assert } from 'chai'
 import { ethers } from 'ethers'
+import { SBT, Network } from '../src/index'
 import { SbtErrorCode, SbtError } from '../src/errors'
 
 const dotenv = require('dotenv')
