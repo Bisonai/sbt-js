@@ -3,8 +3,7 @@
   "version": "0.4.0",
   "description": "Typescript interface to control SBT from @bisonai/sbt-contracts",
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "main": "dist/src/index.js",
   "author": "Bisonai",
