@@ -8,6 +8,16 @@ This repository is a Typescript interface for [@bisonai/sbt-contracts](https://g
 yarn install
 ```
 
+## How to use
+
+```
+import { ethers } from 'ethers'
+import { SBT, Network } from '@bisonai/sbt-js'
+
+const wallet = ethers.Wallet.createRandom()
+const sbt = new SBT(Network.localhost, wallet.privateKey)
+```
+
 ## Testing
 
 Tests defined in `test/sbt.ts` can be used for testing on the local or live network.
