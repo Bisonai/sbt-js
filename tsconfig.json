@@ -1,5 +1,5 @@
 {
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "test", "jest.config.*"],
   "compilerOptions": {
     "module": "commonjs",
     "declaration": true,
@@ -9,7 +9,7 @@
     "allowSyntheticDefaultImports": true,
     "target": "es2017",
     "sourceMap": true,
-    "outDir": "./dist",
+    "outDir": "dist",
     "incremental": true,
     "skipLibCheck": true,
     "noImplicitAny": false,
