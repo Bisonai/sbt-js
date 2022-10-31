@@ -14,7 +14,7 @@
     "build": "tsc",
     "test": "jest --testTimeout 150000",
     "clean": "rm -rf dist",
-    "pub": "yarn publish"
+    "pub": "yarn publish --access public"
   },
   "devDependencies": {
     "@types/chai": "^4.2.0",
