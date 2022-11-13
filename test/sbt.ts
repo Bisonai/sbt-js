@@ -83,20 +83,7 @@ describe('SBT', () => {
     expect(async () => await sbt.getTokenUri({ sbtAddress, tokenId: 100 })).rejects.toThrow()
   })
 
-  it('#5 updateBaseUri should pass', async function () {
-    const newBaseUri = 'http://localhost/'
-    await sbt.updateBaseUri({ sbtAddress, baseUri: newBaseUri })
-    let tokenUri = await sbt.getTokenUri({ sbtAddress, tokenId })
-    logger('sbt-test:updateBaseUri:tokenUri', tokenUri)
-    assert.equal(tokenUri, newBaseUri + tokenId.toString())
-
-    await sbt.updateBaseUri({ sbtAddress, baseUri })
-    tokenUri = await sbt.getTokenUri({ sbtAddress, tokenId })
-    logger('sbt-test:updateBaseUri:tokenUri', tokenUri)
-    assert.equal(tokenUri, baseUri + tokenId.toString())
-  })
-
-  it('#6 sendKlayReward', async function () {
+  it('#5 sendKlayReward', async function () {
     const tokenAmount = '11'
     logger('sbt-test:sendKlayReward:ACCOUNTS.accountAdr1', ACCOUNTS.accountAdr1)
     const txReceipt = await sbt.sendKlayReward({ userAddress: ACCOUNTS.accountAdr1, tokenAmount })
