@@ -89,24 +89,6 @@ export class SBT {
     }
   }
 
-  public async updateBaseUri({
-    sbtAddress,
-    baseUri
-  }: {
-    sbtAddress: string
-    baseUri: string
-  }): Promise<TransactionReceipt> {
-    this.logger('sbt-js:updateBaseURI')
-    this.logger('sbt-js:updateBaseURI:sbtAddress:', sbtAddress)
-
-    try {
-      const sbtContract = this.fetchSbtContract(sbtAddress)
-      return (await sbtContract.updateBaseURI(baseUri)).wait()
-    } catch (err) {
-      throw new SbtError(SbtErrorCode.UpdateBaseUriError, err)
-    }
-  }
-
   public async sendKlayReward({
     userAddress,
     tokenAmount
