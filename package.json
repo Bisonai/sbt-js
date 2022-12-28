@@ -1,6 +1,6 @@
 {
   "name": "@bisonai/sbt-js",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Typescript interface to control SBT from @bisonai/sbt-contracts",
   "files": [
     "dist"
