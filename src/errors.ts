@@ -2,6 +2,7 @@ export enum SbtErrorCode {
   DeploySbtError = 10000,
   MintSbtError,
   GetTokenUriError,
+  OwnerOfError,
   UpdateBaseUriError,
   SendKlayRewardError
 }

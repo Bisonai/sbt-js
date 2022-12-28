@@ -89,6 +89,25 @@ export class SBT {
     }
   }
 
+  public async ownerOf({
+    sbtAddress,
+    tokenId
+  }: {
+    sbtAddress: string
+    tokenId: number
+  }): Promise<TransactionReceipt> {
+    this.logger('sbt-js:ownerOf')
+    this.logger('sbt-js:ownerOf:sbtAddress:', sbtAddress)
+    this.logger('sbt-js:ownerOf:tokenId:', tokenId)
+
+    try {
+      const sbtContract = this.fetchSbtContract(sbtAddress)
+      return await sbtContract.ownerOf(tokenId)
+    } catch (err) {
+      throw new SbtError(SbtErrorCode.OwnerOfError, err)
+    }
+  }
+
   public async sendKlayReward({
     userAddress,
     tokenAmount
