@@ -83,7 +83,17 @@ describe('SBT', () => {
     expect(async () => await sbt.getTokenUri({ sbtAddress, tokenId: 100 })).rejects.toThrow()
   })
 
-  it('#5 sendKlayReward', async function () {
+  it('#5 Get ownerOf tokenId', async function () {
+    const ownerOfToken = await sbt.ownerOf({ sbtAddress, tokenId })
+    logger('sbt-test:ownerOf', ownerOfToken)
+    assert.equal(ownerOfToken, ACCOUNTS.accountAdr0)
+  })
+
+  it('#6 Get ownerOf tokenId should fail with invalid ID', async function () {
+    expect(async () => await sbt.ownerOf({ sbtAddress, tokenId: 100 })).rejects.toThrow()
+  })
+
+  it('#7 sendKlayReward', async function () {
     const tokenAmount = '11'
     logger('sbt-test:sendKlayReward:ACCOUNTS.accountAdr1', ACCOUNTS.accountAdr1)
     const txReceipt = await sbt.sendKlayReward({ userAddress: ACCOUNTS.accountAdr1, tokenAmount })
