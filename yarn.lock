@@ -297,10 +297,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bisonai/sbt-contracts@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@bisonai/sbt-contracts/-/sbt-contracts-0.4.0.tgz#ba45e423264aa4230fe0f65fad15b0bdd8b269ad"
-  integrity sha512-fzGB8mHnVBESefyZA1rgZjzDJ5BmxCuN24VoHgwp4K5aQ0NaTLfNNk4HxegXbCMnej1C28yRV6/15bPrsSjImA==
+"@bisonai/sbt-contracts@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@bisonai/sbt-contracts/-/sbt-contracts-0.5.0.tgz#d54a6dce5f8567c13229628189584da81d0624f8"
+  integrity sha512-2+B3I7w21Z70UhQGbfjEcs5aSWz8q8+TblON7Mj0qVXb8GCDK+8QmpCFhe+/PRJz1oUt1ZaIIBpQ6i32bAZPKw==
 
 "@cspotcode/source-map-support@^0.8.0":
   version "0.8.1"
