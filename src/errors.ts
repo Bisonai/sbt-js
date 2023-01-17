@@ -3,6 +3,7 @@ export enum SbtErrorCode {
   MintSbtError,
   GetTokenUriError,
   OwnerOfError,
+  BalanceOfError,
   UpdateBaseUriError,
   SendKlayRewardError
 }
