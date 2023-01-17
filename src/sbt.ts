@@ -1,4 +1,4 @@
-import { ethers, Contract } from 'ethers'
+import { ethers, Contract, BigNumber } from 'ethers'
 import { TransactionReceipt } from '@ethersproject/abstract-provider'
 import { SBT__factory } from '@bisonai/sbt-contracts'
 import { Network } from './types'
@@ -86,6 +86,25 @@ export class SBT {
       return await sbtContract.tokenURI(tokenId)
     } catch (err) {
       throw new SbtError(SbtErrorCode.GetTokenUriError, err)
+    }
+  }
+
+  public async balanceOf({
+    sbtAddress,
+    userAddress
+  }: {
+    sbtAddress: string
+    userAddress: string
+  }): Promise<BigNumber> {
+    this.logger('sbt-js:balanceOf')
+    this.logger('sbt-js:balanceOf:sbtAddress:', sbtAddress)
+    this.logger('sbt-js:balanceOf:userAddress:', userAddress)
+
+    try {
+      const sbtContract = this.fetchSbtContract(sbtAddress)
+      return await sbtContract.balanceOf(userAddress)
+    } catch (err) {
+      throw new SbtError(SbtErrorCode.BalanceOfError, err)
     }
   }
 
