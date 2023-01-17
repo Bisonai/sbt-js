@@ -1,7 +1,6 @@
 import { assert } from 'chai'
 import { ethers } from 'ethers'
 import { SBT, Network } from '../src/index'
-import { SbtErrorCode, SbtError } from '../src/errors'
 
 const dotenv = require('dotenv')
 dotenv.config()
@@ -93,7 +92,14 @@ describe('SBT', () => {
     expect(async () => await sbt.ownerOf({ sbtAddress, tokenId: 100 })).rejects.toThrow()
   })
 
-  it('#7 sendKlayReward', async function () {
+  it('#7 Get balanceOf userAddress', async function () {
+    const balanceOfAdr0 = await sbt.balanceOf({ sbtAddress, userAddress: ACCOUNTS.accountAdr0 })
+    const balanceOfAdr1 = await sbt.balanceOf({ sbtAddress, userAddress: ACCOUNTS.accountAdr1 })
+    assert.isTrue(balanceOfAdr0.eq(ethers.BigNumber.from('1')))
+    assert.isTrue(balanceOfAdr1.eq(ethers.BigNumber.from('0')))
+  })
+
+  it('#8 sendKlayReward', async function () {
     const tokenAmount = '11'
     logger('sbt-test:sendKlayReward:ACCOUNTS.accountAdr1', ACCOUNTS.accountAdr1)
     const txReceipt = await sbt.sendKlayReward({ userAddress: ACCOUNTS.accountAdr1, tokenAmount })
